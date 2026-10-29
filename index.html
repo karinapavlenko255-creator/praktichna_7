@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЛПР №2 — Організація кадрового діловодства</title>
+    <style>
+        /* Стилізація відповідно до ДСТУ 4163:2020 */
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 14pt;
+            line-height: 1.5;
+            color: #000000;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        .a4-page {
+            background-color: #ffffff;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto 30px auto;
+            padding: 20mm 10mm 20mm 30mm; /* Ліве поле - 30 мм, праве - 10 мм, верх/низ - 20 мм */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Офіційні заголовки */
+        .doc-header {
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14pt;
+            margin-bottom: 10px;
+        }
+
+        .doc-subheader {
+            text-align: center;
+            font-weight: bold;
+            font-size: 13pt;
+            margin-bottom: 20px;
+        }
+
+        /* Блок студента */
+        .student-card {
+            border: 1px solid #000000;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            background-color: #fafafa;
+        }
+
+        .student-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .student-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .student-row label {
+            font-weight: bold;
+            width: 190px;
+            font-size: 13pt;
+        }
+
+        .student-row input {
+            flex: 1;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 13pt;
+            padding: 3px 6px;
+            border: 1px solid #666;
+        }
+
+        /* Інструкція з виконання */
+        .instruction-box {
+            background-color: #eef4fc;
+            border-left: 5px solid #1a56b0;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            font-size: 12pt;
+            line-height: 1.4;
+        }
+
+        .instruction-box ol {
+            margin: 5px 0 0 20px;
+            padding: 0;
+        }
+
+        /* Прогрес бар */
+        .progress-box {
+            margin-bottom: 25px;
+        }
+
+        .progress-bar-bg {
+            background-color: #e0e0e0;
+            height: 16px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background-color: #28a745;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 11pt;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        /* Розділи занять */
+        .section-title {
+            font-weight: bold;
+            font-size: 14pt;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 2px;
+        }
+
+        .task-desc {
+            font-size: 12pt;
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        textarea {
+            width: 100%;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 13pt;
+            line-height: 1.4;
+            padding: 8px;
+            border: 1px solid #555;
+            box-sizing: border-box;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+
+        /* Таблиця самоперевірки */
+        table.dstu-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 11pt;
+        }
+
+        table.dstu-table th, table.dstu-table td {
+            border: 1px solid #000;
+            padding: 5px 8px;
+            text-align: left;
+        }
+
+        table.dstu-table th {
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+
+        .radio-center {
+            text-align: center;
+            width: 45px;
+        }
+
+        /* Режим попереднього перегляду */
+        .preview-container {
+            display: none;
+            border: 2px dashed #1a56b0;
+            background-color: #fcfdfe;
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .preview-title {
+            text-align: center;
+            font-weight: bold;
+            color: #1a56b0;
+            margin-bottom: 15px;
+            font-size: 13pt;
+        }
+
+        .preview-block {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            white-space: pre-wrap;
+            font-size: 12pt;
+        }
+
+        /* Панель підтвердження */
+        .submit-panel {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            margin-top: 30px;
+        }
+
+        .btn {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 13pt;
+            font-weight: bold;
+            padding: 10px 24px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .btn-preview {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        .btn-submit {
+            background-color: #cccccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .btn-submit.active {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+
+        .status-msg {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 12pt;
+            color: #dc3545;
+        }
+
+        .status-msg.ok {
+            color: #28a745;
+        }
+
+        @media print {
+            body { background: none; padding: 0; }
+            .a4-page { box-shadow: none; margin: 0; width: 100%; padding: 20mm 10mm 20mm 30mm; }
+            .instruction-box, .progress-box, .submit-panel, .btn-preview { display: none !important; }
+            textarea { border: none; padding: 0; resize: none; }
+            input { border: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="a4-page">
+
+    <!-- Шапка роботи -->
+    <div class="doc-header">ЛАБОРАТОРНО-ПРАКТИЧНА РОБОТА</div>
+    <div class="doc-subheader">
+        З навчального предмета «Організація кадрового діловодства»<br>
+        <span style="font-weight: normal;">Тема: Укладання автобіографії, характеристики, заяв про відпустки, заповнення анкет</span>
+    </div>
+
+    <!-- Реєстраційна картка студента -->
+    <div class="student-card">
+        <div class="student-row">
+            <label for="student_name">Студент (ПІБ):</label>
+            <input type="text" id="student_name" class="req-field">
+        </div>
+        <div class="student-row">
+            <label for="student_group">Група / Спеціальність:</label>
+            <input type="text" id="student_group" class="req-field">
+        </div>
+        <div class="student-row">
+            <label for="student_date">Дата виконання:</label>
+            <input type="date" id="student_date" class="req-field">
+        </div>
+    </div>
+
+    <!-- Офіційна інструкція з виконання -->
+    <div class="instruction-box">
+        <strong>📋 Інструкція для виконання роботи:</strong>
+        <ol>
+            <li>Заповніть власні відомості у верхній картці студента.</li>
+            <li>Усі текстові завдання розробляйте <strong>самостійно</strong> від першої або третьої особи відповідно до вимог діловодства. Підказки вилучені.</li>
+            <li>Дотримуйтесь офіційно-ділового стилю мовлення та структурної послідовності реквізитів ДСТУ 4163:2020.</li>
+            <li>Заповніть чек-лист самоперевірки (10 критеріїв) та відповіді на всі контрольні запитання.</li>
+            <li>Скористайтеся кнопкою <strong>«Попередній перегляд»</strong> для виявлення та виправлення помилок перед підсумковою здачею.</li>
+        </ol>
+    </div>
+
+    <!-- Прогрес заповнення -->
+    <div class="progress-box">
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+        <div class="progress-text" id="progressText">Прогрес заповнення: 0%</div>
+    </div>
+
+    <!-- Завдання 1 -->
+    <div class="section-title">Завдання 1. Складання автобіографії</div>
+    <p class="task-desc">
+        <strong>Умова:</strong> Ви влаштовуєтеся на посаду секретаря керівника до ТОВ «Агропромсервіс». Складіть власну автобіографію для подання роботодавцю. Дотримуйтесь хронологічної послідовності та вимог до відсутності надлишкових чутливих персональних даних.
+    </p>
+    <textarea id="task1" class="req-field" rows="10"></textarea>
+
+    <!-- Завдання 2 -->
+    <div class="section-title">Завдання 2. Складання характеристики</div>
+    <p class="task-desc">
+        <strong>Умова:</strong> Ви працюєте секретарем керівника навчального закладу. За дорученням керівника складіть проєкт характеристики на студента групи № 21 Петренка Олександра Ігоровича для подання на конкурс «Кращий студент закладу освіти». Текст викладається від третьої особи.
+    </p>
+    <textarea id="task2" class="req-field" rows="10"></textarea>
+
+    <!-- Завдання 3 -->
+    <div class="section-title">Завдання 3. Чек-лист перевірки складених документів</div>
+    <p class="task-desc">Проаналізуйте складені вами документи та дайте відповідь «Так» або «Ні» по кожному критерію:</p>
+
+    <table class="dstu-table">
+        <thead>
+            <tr>
+                <th style="width: 30px;">№</th>
+                <th>Критерій перевірки</th>
+                <th style="width: 50px;">Так</th>
+                <th style="width: 50px;">Ні</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td style="text-align: center;">1</td><td>Правильно зазначено назву документа</td><td class="radio-center"><input type="radio" name="c1" value="yes" class="req-radio"></td><td class="radio-center"><input type="radio" name="c1" value="no" class="req-radio"></td></tr>
+            <tr><td style="text-align: center;">2</td><td>Дотримано логічної послідовності викладу</td><td class="radio-center"><input type="radio" name="c2" value="yes" class="req-radio"></td><td class="radio-center"><input type="radio" name="c2" value="no" class="req-radio"></td></tr>
+            <tr><td style="text-align: center;">3</td><td>Автобіографія написана від першої особи</td><td class="radio-center"><input type="radio" name="c3" value="yes" class="req-radio"></td><td class="radio-center"><input type="radio" name="c3" value="no" class="req-radio"></td></tr>
+            <tr><td style="text-align: center;">4</td><td>Характеристика написана від третьої особи</td><td class="radio-center"><input type="radio" name="c4" value="yes" class="req-radio"></td><td class="radio-center"><input type="radio" name="c4" value="no" class="req-radio"></td></tr>
+            <tr><td style="text-align: center;">5</td><td>Наявні всі необхідні реквізити за ДСТУ 4163:2020</td><td class="radio-center"><input type="radio" name="c5" value="yes" class="req-radio"></td><td class="radio-center"><input type="radio" name="c5" value="no" class="req-radio"></td></tr>
+            <tr><td style="text-align: center;">6</td><td>Зазначено дату документа</td><td class="radio-center"><input type="radio" name="c6" value="yes" class="req-radio"></td><td class="radio-center"><input type="radio" name="c6" value="no" class="req-radio"></td></tr>
+            <tr><td style="text-align: center;">7</td><td>Наявний підпис або місце для підпису</td><td class="radio-center"><input type="radio" name="c7" value="yes" class="req-radio"></td><td class="radio-center"><input type="radio" name="c7" value="no" class="req-radio"></td></tr>
+            <tr><td style="text-align: center;">8</td><td>Відсутні надлишкові чутливі персональні дані</td><td class="radio-center"><input type="radio" name="c8" value="yes" class="req-radio"></td><td class="radio-center"><input type="radio" name="c8" value="no" class="req-radio"></td></tr>
+            <tr><td style="text-align: center;">9</td><td>Дотримано офіційно-ділового стилю мовлення</td><td class="radio-center"><input type="radio" name="c9" value="yes" class="req-radio"></td><td class="radio-center"><input type="radio" name="c9" value="no" class="req-radio"></td></tr>
+            <tr><td style="text-align: center;">10</td><td>Відсутні орфографічні та пунктуаційні помилки</td><td class="radio-center"><input type="radio" name="c10" value="yes" class="req-radio"></td><td class="radio-center"><input type="radio" name="c10" value="no" class="req-radio"></td></tr>
+        </tbody>
+    </table>
+
+    <!-- Контрольні запитання -->
+    <div class="section-title">Контрольні запитання</div>
+
+    <div style="margin-bottom: 12px;">
+        <label><strong>1. Що таке автобіографія та для яких цілей її складають?</strong></label>
+        <textarea id="q1" class="req-field" rows="3"></textarea>
+    </div>
+    <div style="margin-bottom: 12px;">
+        <label><strong>2. У якій послідовності рекомендовано викладати відомості в автобіографії?</strong></label>
+        <textarea id="q2" class="req-field" rows="3"></textarea>
+    </div>
+    <div style="margin-bottom: 12px;">
+        <label><strong>3. Від якої особи складається характеристика?</strong></label>
+        <textarea id="q3" class="req-field" rows="2"></textarea>
+    </div>
+    <div style="margin-bottom: 12px;">
+        <label><strong>4. Назвіть види характеристик і сферу їх застосування.</strong></label>
+        <textarea id="q4" class="req-field" rows="3"></textarea>
+    </div>
+    <div style="margin-bottom: 12px;">
+        <label><strong>5. Які вимоги до шрифту, міжрядкового інтервалу та формату аркуша за ДСТУ 4163:2020?</strong></label>
+        <textarea id="q5" class="req-field" rows="3"></textarea>
+    </div>
+    <div style="margin-bottom: 12px;">
+        <label><strong>6. Як секретар має забезпечувати захист персональних даних під час роботи з документами особового складу?</strong></label>
+        <textarea id="q6" class="req-field" rows="3"></textarea>
+    </div>
+    <div style="margin-bottom: 12px;">
+        <label><strong>7. Які помилки найчастіше трапляються під час складання характеристики?</strong></label>
+        <textarea id="q7" class="req-field" rows="3"></textarea>
+    </div>
+
+    <!-- Висновок -->
+    <div class="section-title">Висновок</div>
+    <textarea id="conclusion" class="req-field" rows="3"></textarea>
+
+    <!-- Блок попереднього перегляду для виявлення помилок -->
+    <div id="previewBox" class="preview-container">
+        <div class="preview-title">🔍 ПОПЕРЕДНІЙ ПЕРЕГЛЯД ТА ВЕРИФІКАЦІЯ ДОКУМЕНТА</div>
+        <div id="previewContent"></div>
+    </div>
+
+    <!-- Панель дій -->
+    <div class="submit-panel">
+        <button type="button" class="btn btn-preview" onclick="togglePreview()">🔍 Попередній перегляд / Виявлення помилок</button>
+        <button type="button" id="submitBtn" class="btn btn-submit" disabled>Здати практичну роботу (PDF / Друк)</button>
+        <div id="statusMsg" class="status-msg">Заповніть усі обов'язкові поля для розблокування здачі.</div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const fields = document.querySelectorAll(".req-field");
+        const submitBtn = document.getElementById("submitBtn");
+        const statusMsg = document.getElementById("statusMsg");
+        const progressBar = document.getElementById("progressBar");
+        const progressText = document.getElementById("progressText");
+
+        const radioGroups = [];
+        for (let i = 1; i <= 10; i++) radioGroups.push("c" + i);
+
+        function validateForm() {
+            let total = fields.length + radioGroups.length;
+            let current = 0;
+
+            fields.forEach(f => {
+                if (f.value.trim() !== "") current++;
+            });
+
+            radioGroups.forEach(g => {
+                if (document.querySelector(`input[name="${g}"]:checked`)) current++;
+            });
+
+            let pct = Math.round((current / total) * 100);
+            progressBar.style.width = pct + "%";
+            progressText.innerText = "Прогрес заповнення: " + pct + "%";
+
+            if (current === total) {
+                submitBtn.disabled = false;
+                submitBtn.classList.add("active");
+                statusMsg.innerText = "Усі поля та відповіді успішно заповнені! Ви можете здати роботу.";
+                statusMsg.className = "status-msg ok";
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.remove("active");
+                statusMsg.innerText = "Заповніть усі обов'язкові поля та оберіть відповіді в таблиці для розблокування здачі.";
+                statusMsg.className = "status-msg";
+            }
+        }
+
+        fields.forEach(f => f.addEventListener("input", validateForm));
+        document.querySelectorAll(".req-radio").forEach(r => r.addEventListener("change", validateForm));
+
+        submitBtn.addEventListener("click", function () {
+            if (!submitBtn.disabled) {
+                window.print();
+            }
+        });
+    });
+
+    function togglePreview() {
+        const box = document.getElementById("previewBox");
+        const content = document.getElementById("previewContent");
+
+        if (box.style.display === "block") {
+            box.style.display = "none";
+        } else {
+            let name = document.getElementById("student_name").value || "[Не вказано ПІБ]";
+            let group = document.getElementById("student_group").value || "[Не вказано групу]";
+            let date = document.getElementById("student_date").value || "[Не вказано дату]";
+            let task1 = document.getElementById("task1").value || "[Завдання 1 не заповнено]";
+            let task2 = document.getElementById("task2").value || "[Завдання 2 не заповнено]";
+
+            content.innerHTML = `
+                <div class="preview-block"><strong>Студент:</strong> ${name} | <strong>Група:</strong> ${group} | <strong>Дата:</strong> ${date}</div>
+                <div class="preview-block"><strong>Текст Автобіографії (Завдання 1):</strong><br>${task1}</div>
+                <div class="preview-block"><strong>Текст Характеристики (Завдання 2):</strong><br>${task2}</div>
+                <p style="font-size:11pt; color:#666;">Перевірте правильність написання реквізитів, відсутність орфографічних помилок та відповідність хронології перед здачею.</p>
+            `;
+            box.style.display = "block";
+            box.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+</script>
+
+</body>
+</html>
